@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: postgres1
+  template:
+    metadata:
+      labels:
+        component: postgres1
+    spec:
+      volumes:
+        - name: postgres1-storage
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
+      containers:
+        - name: postgres1
+          image: postgres
+          ports: 
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres1-storage
+              mountPath: /var/lib/postgres1ql/data
+              subPath: postgres1

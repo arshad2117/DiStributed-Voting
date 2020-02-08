@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres3-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: postgres3
+  template:
+    metadata:
+      labels:
+        component: postgres3
+    spec:
+      volumes:
+        - name: postgres3-storage
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
+      containers:
+        - name: postgres3
+          image: postgres
+          ports: 
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres3-storage
+              mountPath: /var/lib/postgres3ql/data
+              subPath: postgres3
